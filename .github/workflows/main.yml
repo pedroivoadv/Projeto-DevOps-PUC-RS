@@ -1,0 +1,38 @@
+name: Build React + Vite
+
+# Definir os gatilhos para o workflow
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Configuração dos jobs do workflow
+jobs:
+  build:
+    runs-on: ubuntu-latest #executa maquina Ubuntu
+
+    steps:
+      # 1. Checar o código do repositório
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      # 2. Configurar o node.js
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  
+    
+    # 3. instalar dependencias 
+      - name: Instalar dependências
+        run: npm install
+
+    # 4. Rodar os testes (opcional)
+
+    # 5. Criar os artefatos ou build
+      - name: Rodar build
+        run: npm run build
+
+      
+      - name: Validar build
+        run: ls -la dist
