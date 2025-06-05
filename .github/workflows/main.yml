@@ -36,3 +36,22 @@ jobs:
       
       - name: Validar build
         run: ls -la dist
+
+  deploy: 
+    runs-on: ubuntu-latest
+    steps:
+    # 1. Fazer o deploy para o servidor via ssh
+    - name: Deploy to server via SSH
+      uses: appleboy/ssh-action@v1.2.0  # Action para SSH
+      with:
+        host: ${{ secrets.HOST }}  # Defina isso no repositório em Secrets
+        username: ${{ secrets.USER_NAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Defina a chave SSH no Secrets
+        port: 22
+        script: |
+          sudo set enforce 0
+          cd ./calculadora || git clone https://github.com/pedroivoadv/Projeto-DevOps-PUC-RS.git
+          cd Projeto-DevOps-PUC-RS
+          git pull origin main  # Ou outro comando para atualizar o código
+          npm install
+          pm2 start server.js  # Exemplo para reiniciar a aplicação Node.js com PM2    
